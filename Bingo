@@ -1,0 +1,43 @@
+#Realizar un programa que genere 15 números aleatorio enteros en el rango del 1 al 100, que
+#representaría la tarjeta de bingo de una persona. Una vez generado los números aleatorios
+#solicitar al usuario que ingrese 3 números enteros, a partir de allí mostrar los siguientes mensajes:
+#Si el usuario no marco ninguno de los números indicarlo diciendo “el jugador tiene mala suerte, no marco ninguna casilla”.
+#Caso contrario mostrar “el jugador maco algún número de la tarjeta”.
+import random
+def aleatorio():
+    return random.randint(1, 100)        #Funcion q devuelve un numero aleatorio
+
+numeros = set()
+eleccion = set()
+
+for i in range(15):                     #15 numeros diferentes
+    numero = aleatorio()
+    while numero in numeros:            #Verifica que haya numeros aleatorios. Caso de que no, genera otro
+        numero = aleatorio()
+    numeros.add(numero)
+    
+print("Bienvenido a la lotería GPT. Por favor, ingrese 3 números positivos distintos.")
+
+while len(eleccion) < 3:                #Pide hasta 3 numeros al usuario
+    num = int(input())
+    if num > 0:                         #Verifica que no sean mayores a 0
+        if num in eleccion:
+            print("El numero ha sido ingresado. Ingrese uno diferente")      #Verifica que no sean iguales 
+        else:
+            eleccion.add(num)
+    else:
+        print("Ingrese un número positivo.")
+
+acerto = False
+
+for numero in eleccion:
+    if numero in numeros:               #Numero elegido por el usuario esta en la eleccion de numeros del bingo
+        acerto = True                   #Si esta, cambia a True, por ende muestra que ganó
+        
+if acerto:
+    print("el jugador maco algún número de la tarjeta")
+else:
+    print("el jugador tiene mala suerte, no marco ninguna casilla")
+
+print("Numeros elegidos: ",eleccion)
+print("Numeros sorteados: ",numeros)
