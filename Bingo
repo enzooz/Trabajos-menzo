@@ -3,19 +3,19 @@
 #solicitar al usuario que ingrese 3 números enteros, a partir de allí mostrar los siguientes mensajes:
 #Si el usuario no marco ninguno de los números indicarlo diciendo “el jugador tiene mala suerte, no marco ninguna casilla”.
 #Caso contrario mostrar “el jugador maco algún número de la tarjeta”.
+#Tarjeta de 9 columnas y 3 filas
+#primera columna del 1 al 10. Segunda del 11 al 19 .tercera del 20 al 29, cuarta del 30 al 39
+#quinta del 40 al 49, sexta del 50 al 59, septima del 60 al 69, octava del 70 al 79, novena del 80 al 90
 import random
-def aleatorio():
-    return random.randint(1, 100)        #Funcion q devuelve un numero aleatorio
 
-numeros = set()
+def aleatorio(x, y):
+    return random.randint(x, y)
+
 eleccion = set()
+usados = set()
+tarjeta = []
+acerto = False
 
-for i in range(15):                     #15 numeros diferentes
-    numero = aleatorio()
-    while numero in numeros:            #Verifica que haya numeros aleatorios. Caso de que no, genera otro
-        numero = aleatorio()
-    numeros.add(numero)
-    
 print("Bienvenido a la lotería GPT. Por favor, ingrese 3 números positivos distintos.")
 
 while len(eleccion) < 3:                #Pide hasta 3 numeros al usuario
@@ -27,17 +27,54 @@ while len(eleccion) < 3:                #Pide hasta 3 numeros al usuario
             eleccion.add(num)
     else:
         print("Ingrese un número positivo.")
+        
+for i in range(3):
+    fila = ["□" for _ in range(9)]
 
-acerto = False
+    columnas_con_numero = random.sample(range(9), 5)                        # Elegir 5 columnas donde habrá números
+
+    for j in columnas_con_numero:
+        if j == 0:
+            minimo, maximo = 1, 10
+        elif j == 1:
+            minimo, maximo = 11, 19
+        elif j == 2:
+            minimo, maximo = 20, 29
+        elif j == 3:
+            minimo, maximo = 30, 39
+        elif j == 4:
+            minimo, maximo = 40, 49
+        elif j == 5:
+            minimo, maximo = 50, 59
+        elif j == 6:
+            minimo, maximo = 60, 69
+        elif j == 7:
+            minimo, maximo = 70, 79
+        else:
+            minimo, maximo = 80, 90
+
+        num = aleatorio(minimo, maximo)
+
+        while num in usados:
+            num = aleatorio(minimo, maximo)
+
+        usados.add(num)
+        fila[j] = num
+
+    tarjeta.append(fila)
 
 for numero in eleccion:
-    if numero in numeros:               #Numero elegido por el usuario esta en la eleccion de numeros del bingo
-        acerto = True                   #Si esta, cambia a True, por ende muestra que ganó
-        
+    for fila in tarjeta:
+        if numero in fila:
+            acerto = True
+            break
+    if acerto:
+        break
+
 if acerto:
     print("el jugador maco algún número de la tarjeta")
 else:
     print("el jugador tiene mala suerte, no marco ninguna casilla")
 
-print("Numeros elegidos: ",eleccion)
-print("Numeros sorteados: ",numeros)
+for fila in tarjeta:
+    print(fila)
